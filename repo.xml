@@ -1,0 +1,10 @@
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <author>Joe Wicentowski</author>
+    <website>http://joewiz.org/</website>
+    <license>GNU-LGPL</license>
+    <copyright>true</copyright>
+    <description>An XQuery module for listing and extracting the contents of zip files. Requires the
+        FunctX library.</description>
+    <type>library</type>
+    <status>stable</status>
+</meta>
