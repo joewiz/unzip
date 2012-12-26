@@ -4,16 +4,17 @@ An XQuery module for listing and extracting the contents of zip files stored in 
 eXist-db has a built-in module that can perform many sophisticated operations on compressed files
 (see the [compression module](http://exist-db.org/exist/functions/compression)), but many lines of
 code are needed to simply list or extract the contents of zip files.  This module exposes two functions
-for performing these operations.
+for performing these operations. 
 
 ## Installation
 
-This module depends upon the FunctX library, so install this via the eXist-db admin page's Repository pane;
-FunctX can be found under the Public Repo tab. 
+This module requires eXist-db 2.0 and has been tested with 2.0RC.  It is not compatible with eXist-db 1.x.  
+It also depends upon the FunctX library, so install this via the Admin Web Application's Package Repository 
+pane; FunctX can be found under the CXAN tab. 
 
 Next, clone this repository and run ant, which will construct an EXPath Archive (.xar) file.  
 
-Finally, install this via the eXist-db admin page's Repository pane.
+Finally, install this via the eXist-db Package Manager.
 
 ## Usage
 
@@ -42,6 +43,6 @@ must have write access to the destination collection.
 ## Late-breaking developments
 
 The EXPath project has a specification for a [zip module](http://expath.org/spec/zip).  eXist-db has 
-implemented [some of the functions](http://exist-db.org/exist/functions/zip) in the specification, but not all.  
+implemented [some of the functions](http://exist-db.org/exist/apps/fundocs/index.html) in the specification, but not all.  
 Further development of that module might obviate the need for this module, or if this module is still useful,
 it could end up simplifying the code here.
