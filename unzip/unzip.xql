@@ -26,7 +26,7 @@ declare %private function unzip:mkcol-recursive($collection, $components) as xs:
 
 (: Helper function to recursively create a collection hierarchy. :)
 declare %private function unzip:mkcol($collection, $path) as xs:string* {
-    unzip:mkcol-recursive($collection, tokenize($path, "/"))
+    unzip:mkcol-recursive($collection, tokenize($path, "/") ! xmldb:encode(.))
 };
 
 (: Helper function to recursively create a collection hierarchy. :)
@@ -49,6 +49,7 @@ declare %private function unzip:store-entry($path as xs:string, $data-type as xs
                 <entry path="{$path}" data-type="{$data-type}"/>
         else (: if ($data-type = 'resource') :)
             let $resource-collection := concat($unzip-base-collection, '/', functx:substring-before-last($path, '/'))
+            let $resource-collection := xmldb:encode($resource-collection)
             let $resource-filename := if (contains($path, '/')) then functx:substring-after-last($path, '/') else $path
             let $resource-filename := xmldb:encode($resource-filename)
             return
@@ -106,7 +107,7 @@ declare function unzip:unzip($zip-file as xs:string) as element(entries) {
  :) 
 declare function unzip:unzip($zip-file as xs:string, $target-collection as xs:string) as element(entries) {
     let $file := if (util:binary-doc-available($zip-file)) then util:binary-doc($zip-file) else error(xs:QName('unzip'), concat($zip-file, ' does not exist or is not a valid binary file'))
-    let $unzip-base-collection := unzip:mkcol($target-collection)[last()]
+    let $unzip-base-collection := if ($target-collection eq '/db') then '/db' else unzip:mkcol($target-collection)[last()]
     let $entry-filter := unzip:allow-all-entries-through#3
     let $entry-filter-params := ()
     let $entry-data := unzip:store-entry#4
