@@ -18,7 +18,9 @@ declare %private function unzip:mkcol-recursive($collection, $components) as xs:
         let $newColl := concat($collection, "/", $components[1])
         return (
             xmldb:create-collection($collection, $components[1]),
-            unzip:mkcol-recursive($newColl, subsequence($components, 2))
+            if ($components[2]) then 
+                unzip:mkcol-recursive($newColl, subsequence($components, 2))
+            else ()
         )
     else
         ()
@@ -48,12 +50,12 @@ declare %private function unzip:store-entry($path as xs:string, $data-type as xs
             return
                 <entry path="{$path}" data-type="{$data-type}"/>
         else (: if ($data-type = 'resource') :)
-            let $resource-collection := concat($unzip-base-collection, '/', functx:substring-before-last($path, '/'))
-            let $resource-collection := xmldb:encode($resource-collection)
+            let $resource-collection := concat($unzip-base-collection, '/', xmldb:encode(functx:substring-before-last($path, '/')))
             let $resource-filename := if (contains($path, '/')) then functx:substring-after-last($path, '/') else $path
             let $resource-filename := xmldb:encode($resource-filename)
             return
                 try {
+                    let $collection-check := if (xmldb:collection-available($resource-collection)) then () else unzip:mkcol($resource-collection)
                     let $store := xmldb:store($resource-collection, $resource-filename, $data)
                     return
                         <entry path="{$path}" data-type="{$data-type}"/>
@@ -107,7 +109,7 @@ declare function unzip:unzip($zip-file as xs:string) as element(entries) {
  :) 
 declare function unzip:unzip($zip-file as xs:string, $target-collection as xs:string) as element(entries) {
     let $file := if (util:binary-doc-available($zip-file)) then util:binary-doc($zip-file) else error(xs:QName('unzip'), concat($zip-file, ' does not exist or is not a valid binary file'))
-    let $unzip-base-collection := if ($target-collection eq '/db') then '/db' else unzip:mkcol($target-collection)[last()]
+    let $unzip-base-collection := if ($target-collection = ('/db', '/db/')) then '/db' else unzip:mkcol($target-collection)
     let $entry-filter := unzip:allow-all-entries-through#3
     let $entry-filter-params := ()
     let $entry-data := unzip:store-entry#4
