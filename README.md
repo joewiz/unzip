@@ -10,7 +10,8 @@ for performing these operations.
 
 This module requires eXist-db 2.0 and has been tested with 2.0RC.  It is not compatible with eXist-db 1.x.  
 It also depends upon the FunctX library, so install this via the Admin Web Application's Package Repository 
-pane; FunctX can be found under the CXAN tab. 
+pane; FunctX can be found under the CXAN tab.  (The development version of eXist-db 2.0RC2 will automatically
+install FunctX as a dependency and so will not require separately installing FunctX.)
 
 Next, clone this repository and run ant, which will construct an EXPath Archive (.xar) file.  
 
@@ -27,7 +28,7 @@ Finally, install this via the eXist-db Package Manager.
 This function displays the contents of a zip file.  Simply provide a path to where the zip file is 
 stored in the database.
 
-    unzip:list('/db/xquery_examples.zip')
+    unzip:list('/db/test.zip')
 
 ### unzip:unzip()
 
@@ -36,13 +37,13 @@ in the same collection.  Or, to store the contents in a different collection, pr
 destination.  If the destination collection doesn't exist, it will be created.  The user who invokes the function
 must have write access to the destination collection.
 
-    unzip:unzip('/db/xquery_examples.zip')
+    unzip:unzip('/db/test.zip')
 
-    unzip:unzip('/db/xquery_examples.zip', '/db/test')
+    unzip:unzip('/db/test.zip', '/db/test')
 
-## Late-breaking developments
+## Related work
 
 The EXPath project has a specification for a [zip module](http://expath.org/spec/zip).  eXist-db has 
-implemented [some of the functions](http://exist-db.org/exist/apps/fundocs/index.html) in the specification, but not all.  
-Further development of that module might obviate the need for this module, or if this module is still useful,
-it could end up simplifying the code here.
+implemented [some of the functions](http://exist-db.org/exist/apps/fundocs/index.html) in the specification, 
+but not all -- and in particular not those that this project helps with.  However, further development of 
+that module might obviate the need for this module.  
