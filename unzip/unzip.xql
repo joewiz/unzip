@@ -109,7 +109,7 @@ declare function unzip:unzip($zip-file as xs:string) as element(entries) {
  :) 
 declare function unzip:unzip($zip-file as xs:string, $target-collection as xs:string) as element(entries) {
     let $file := if (util:binary-doc-available($zip-file)) then util:binary-doc($zip-file) else error(xs:QName('unzip'), concat($zip-file, ' does not exist or is not a valid binary file'))
-    let $unzip-base-collection := if ($target-collection = ('/db', '/db/')) then '/db' else unzip:mkcol($target-collection)
+    let $unzip-base-collection := if (xmldb:collection-available($target-collection)) then $target-collection else unzip:mkcol($target-collection)[last()]
     let $entry-filter := unzip:allow-all-entries-through#3
     let $entry-filter-params := ()
     let $entry-data := unzip:store-entry#4
